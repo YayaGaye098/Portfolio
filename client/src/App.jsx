@@ -551,16 +551,19 @@ function AdminProjectsList({ projects, onEdit, onNew, onDelete }) {
         <input value={query} onChange={(event) => setQuery(event.target.value)} />
       </div>
       <div style={{ borderTop: "2px solid var(--ink)" }}>
-        <div className="dm-table-row" style={{ gridTemplateColumns: "1fr 120px 1fr 110px 80px", fontSize: 11, textTransform: "uppercase", color: "var(--ink-soft)" }}>
-          <span>Titre</span><span>Statut</span><span>Tags</span><span>Maj</span><span></span>
+        <div className="dm-table-row" style={{ gridTemplateColumns: "1fr 120px 1fr 110px 170px", fontSize: 11, textTransform: "uppercase", color: "var(--ink-soft)" }}>
+          <span>Titre</span><span>Statut</span><span>Tags</span><span>Maj</span><span>Actions</span>
         </div>
         {filtered.map((project) => (
-          <div key={project.id} className="dm-table-row" style={{ gridTemplateColumns: "1fr 120px 1fr 110px 80px" }}>
+          <div key={project.id} className="dm-table-row" style={{ gridTemplateColumns: "1fr 120px 1fr 110px 170px" }}>
             <button onClick={() => onEdit(project)} style={{ border: 0, background: "transparent", padding: 0, textAlign: "left", font: "700 13px Consolas, 'Courier New', monospace", cursor: "pointer" }}>{project.title}</button>
             <span className={`dm-badge ${project.status}`}>{project.status === "published" ? "publie" : "brouillon"}</span>
             <span className="dm-muted">{project.tags.join(" / ")}</span>
             <span className="dm-muted">{project.updated}</span>
-            <button onClick={() => onDelete(project)} style={{ border: 0, background: "transparent", color: "var(--accent)", cursor: "pointer", fontWeight: 700 }}>Suppr.</button>
+            <span style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <button onClick={() => onEdit(project)} style={{ border: 0, background: "transparent", color: "var(--accent-2)", cursor: "pointer", fontWeight: 700 }}>Modifier</button>
+              <button onClick={() => onDelete(project)} style={{ border: 0, background: "transparent", color: "var(--accent)", cursor: "pointer", fontWeight: 700 }}>Suppr.</button>
+            </span>
           </div>
         ))}
         {filtered.length === 0 && <p className="dm-muted">Aucun resultat.</p>}

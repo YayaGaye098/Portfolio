@@ -37,10 +37,13 @@ const rateBuckets = new Map();
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
 
-const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173")
+const configuredOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+const allowedOrigins = Array.from(
+  new Set([...configuredOrigins, process.env.RENDER_EXTERNAL_URL].filter(Boolean))
+);
 
 app.use(
   cors({

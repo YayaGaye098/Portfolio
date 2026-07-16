@@ -1,9 +1,12 @@
 import { JSONFilePreset } from "lowdb/node";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dbFile = path.join(__dirname, "data.json");
+const dataDir = process.env.DATA_DIR || __dirname;
+fs.mkdirSync(dataDir, { recursive: true });
+const dbFile = path.join(dataDir, "data.json");
 
 const defaultData = {
   projects: [

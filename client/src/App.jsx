@@ -938,7 +938,7 @@ export default function App() {
             <button onClick={handleLogout}>Deconnexion</button>
           </>
         ) : (
-          <button className={navView === "login" ? "active" : ""} onClick={() => setView("login")}>Connexion admin</button>
+          <button className={navView === "login" ? "active" : ""} onClick={() => setView("login")}>Connexion</button>
         )}
       </div>
 

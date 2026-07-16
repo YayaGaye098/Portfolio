@@ -79,7 +79,7 @@ L'app peut etre publiee comme un seul service Node: le serveur Express sert l'AP
 3. Commande de build:
 
 ```bash
-npm run install:all && npm run build
+npm install && npm run build
 ```
 
 4. Commande de demarrage:

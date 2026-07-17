@@ -34,6 +34,8 @@ const GLOBAL_CSS = `
 .dm-topnav{position:fixed; top:10px; right:10px; z-index:30; display:flex; flex-wrap:wrap; gap:6px; max-width:min(620px, calc(100% - 20px)); background:var(--ink); color:var(--bg); border:2px solid var(--accent); padding:8px}
 .dm-topnav button{height:30px; border:1px solid #f7f8f4; background:transparent; color:#f7f8f4; padding:0 10px; font:14px Consolas, "Courier New", monospace; cursor:pointer}
 .dm-topnav button.active{background:var(--accent); border-color:var(--accent)}
+.dm-nav-toggle{display:none; position:fixed; top:10px; right:10px; z-index:43; height:38px; border:2px solid var(--accent); background:var(--ink); color:var(--bg); padding:0 14px; font:700 13px Consolas, "Courier New", monospace; cursor:pointer; text-transform:uppercase}
+.dm-nav-backdrop,.dm-admin-backdrop{display:none}
 .dm-btn{min-height:38px; border:2px solid var(--ink); background:var(--surface); color:var(--ink); padding:8px 16px; font:700 14px Consolas, "Courier New", monospace; cursor:pointer; text-transform:uppercase}
 .dm-btn:hover,.dm-btn:focus-visible{background:var(--ink); color:var(--bg)}
 .dm-btn.solid{background:var(--ink); color:var(--bg)}
@@ -63,10 +65,21 @@ const GLOBAL_CSS = `
 .dm-table-row{display:grid; gap:12px; align-items:center; border-bottom:1px dashed var(--line-soft); padding:12px 0; font-size:13px}
 .dm-hero-title{font-size:76px; line-height:.92; margin:0}
 .dm-section-title{font-size:28px; margin:0 0 4px}
+.dm-footer{border-top:2px solid var(--ink); margin-top:46px; padding:20px 0 10px; display:flex; justify-content:space-between; align-items:flex-start; gap:18px; flex-wrap:wrap; font-size:13px}
+.dm-footer strong{display:block; margin-bottom:6px; text-transform:uppercase}
+.dm-footer-links{display:flex; gap:14px; flex-wrap:wrap}
+.dm-footer-links a{color:var(--accent); font-weight:700; text-decoration:none; border-bottom:1px solid var(--accent)}
+.dm-scroll-top{position:fixed; right:18px; bottom:18px; z-index:38; width:44px; height:44px; border:2px solid var(--ink); background:var(--accent); color:var(--bg); font:800 20px Consolas, "Courier New", monospace; cursor:pointer; opacity:0; pointer-events:none; transform:translateY(8px); transition:opacity .18s ease, transform .18s ease}
+.dm-scroll-top.visible{opacity:1; pointer-events:auto; transform:translateY(0)}
 .dm-admin-shell{display:grid; grid-template-columns:230px 1fr; min-height:100vh; gap:0}
 .dm-sidebar{border-right:2px solid var(--ink); background:var(--surface-2); padding:24px 18px; display:flex; flex-direction:column}
 .dm-sidebar button{width:100%; text-align:left; border:0; background:transparent; color:var(--ink); padding:10px; font:14px Consolas, "Courier New", monospace; cursor:pointer}
 .dm-sidebar button.active{background:var(--ink); color:var(--bg)}
+.dm-sidebar-head{display:flex; justify-content:space-between; align-items:start; gap:12px; margin-bottom:28px}
+.dm-sidebar-close{border:1px solid var(--line) !important; width:auto !important; padding:6px 8px !important; font-size:12px !important; text-align:center !important; text-transform:uppercase}
+.dm-sidebar-toggle{border:1px solid var(--line); background:var(--surface); color:var(--ink); padding:8px 12px; font:700 13px Consolas, "Courier New", monospace; cursor:pointer; text-transform:uppercase}
+.dm-admin-shell.sidebar-closed{grid-template-columns:0 1fr}
+.dm-admin-shell.sidebar-closed .dm-sidebar{padding:0; border-right:0; overflow:hidden}
 .dm-stat{min-height:116px; padding:15px}
 .dm-stat-value{font-size:34px; color:var(--accent); overflow-wrap:anywhere}
 .dm-contact-message{white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.55}
@@ -76,11 +89,20 @@ const GLOBAL_CSS = `
 @media(max-width:900px){
   .dm-shell{width:min(100% - 28px, 760px); padding-top:74px}
   .dm-rail{display:none}
+  .dm-nav-toggle{display:block}
+  .dm-nav-backdrop.open,.dm-admin-backdrop.open{display:block; position:fixed; inset:0; z-index:40; border:0; background:rgba(17,17,17,.42); padding:0}
+  .dm-topnav{top:0; right:0; bottom:0; width:min(292px, 84vw); max-width:none; flex-direction:column; flex-wrap:nowrap; align-items:stretch; gap:8px; border:0; border-left:2px solid var(--accent); padding:68px 14px 14px; transform:translateX(105%); transition:transform .18s ease; z-index:42}
+  .dm-topnav.open{transform:translateX(0)}
+  .dm-topnav button{width:100%; height:42px; text-align:left}
   .dm-hero-title{font-size:48px}
   .dm-grid-2,.dm-grid-3,.dm-grid-4{grid-template-columns:1fr}
-  .dm-admin-shell{grid-template-columns:1fr}
-  .dm-sidebar{border-right:0; border-bottom:2px solid var(--ink)}
-  .dm-sidebar nav{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px}
+  .dm-footer{display:grid; gap:14px}
+  .dm-admin-shell{display:block; width:min(100% - 28px, 760px); padding-top:74px}
+  .dm-admin-shell main{padding:0 !important}
+  .dm-sidebar{position:fixed; top:0; left:0; bottom:0; width:min(292px, 84vw); z-index:42; border-right:2px solid var(--ink); border-bottom:0; box-shadow:4px 0 0 var(--ink); transform:translateX(-105%); transition:transform .18s ease}
+  .dm-admin-shell.sidebar-open .dm-sidebar{transform:translateX(0)}
+  .dm-admin-shell.sidebar-closed{grid-template-columns:1fr}
+  .dm-admin-shell.sidebar-closed .dm-sidebar{padding:24px 18px; border-right:2px solid var(--ink); overflow:auto}
   .dm-table-row{grid-template-columns:1fr !important}
 }
 `;
@@ -112,6 +134,44 @@ function Rails() {
 
 function Tear({ children = "section" }) {
   return <div className="dm-tear">{children}</div>;
+}
+
+function SiteFooter({ contactLink = true }) {
+  return (
+    <footer className="dm-footer">
+      <div>
+        <strong>Yaya Gaye</strong>
+        <span className="dm-muted">Developpeur full-stack - Dakar / remote</span>
+      </div>
+      <div className="dm-footer-links">
+        {contactLink && <a href="#contact">Contact</a>}
+        <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
+    </footer>
+  );
+}
+
+function ScrollTopButton() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 420);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <button
+      className={`dm-scroll-top ${visible ? "visible" : ""}`}
+      type="button"
+      aria-label="Revenir en haut de page"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+    >
+      ^
+    </button>
+  );
 }
 
 function formatDate(value) {
@@ -328,6 +388,7 @@ function PortfolioSite({ projects, cv, onOpenCv }) {
           </div>
         </form>
       </section>
+      <SiteFooter />
     </div>
   );
 }
@@ -388,6 +449,7 @@ function PublicCV({ cv, projects, onBack }) {
           </article>
         ))}
       </section>
+      <SiteFooter contactLink={false} />
     </div>
   );
 }
@@ -442,26 +504,41 @@ function AdminLogin({ onLogin }) {
 }
 
 function AdminLayout({ current, setView, path, children, onLogout }) {
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.matchMedia("(min-width: 901px)").matches;
+  });
   const nav = [
     ["dashboard", "Dashboard"],
     ["projects", "Projets"],
     ["cv", "CV"],
     ["contacts", "Contacts"],
   ];
+  const goAdmin = (key) => {
+    setView(key);
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 900px)").matches) {
+      setSidebarOpen(false);
+    }
+  };
 
   return (
-    <div className="dm-shell dm-admin-shell">
+    <div className={`dm-shell dm-admin-shell ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
+      <button className={`dm-admin-backdrop ${sidebarOpen ? "open" : ""}`} type="button" aria-label="Fermer le menu admin" onClick={() => setSidebarOpen(false)} />
       <aside className="dm-sidebar">
-        <div className="dm-h-display" style={{ fontSize: 22, marginBottom: 28 }}>Portfolio<span style={{ color: "var(--accent)" }}>.</span>admin</div>
+        <div className="dm-sidebar-head">
+          <div className="dm-h-display" style={{ fontSize: 22 }}>Portfolio<span style={{ color: "var(--accent)" }}>.</span>admin</div>
+          <button className="dm-sidebar-close" type="button" onClick={() => setSidebarOpen(false)}>Fermer</button>
+        </div>
         <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
           {nav.map(([key, label]) => (
-            <button key={key} className={current === key ? "active" : ""} onClick={() => setView(key)}>{label}</button>
+            <button key={key} className={current === key ? "active" : ""} onClick={() => goAdmin(key)}>{label}</button>
           ))}
         </nav>
         <button onClick={onLogout} style={{ border: "1px solid var(--line)", marginTop: 16 }}>Deconnexion</button>
       </aside>
       <main style={{ padding: "24px 28px", minWidth: 0 }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", borderBottom: "1px solid var(--line-soft)", paddingBottom: 12, marginBottom: 24, color: "var(--ink-soft)", fontSize: 13 }}>
+          <button className="dm-sidebar-toggle" type="button" aria-expanded={sidebarOpen} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? "Fermer menu" : "Ouvrir menu"}</button>
           <span>{path}</span>
           <span style={{ color: "var(--accent-2)", fontWeight: 700 }}>session active</span>
         </div>
@@ -747,6 +824,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
 
   const effectiveView = ADMIN_VIEWS.includes(view) && !isAuthenticated ? "login" : view;
 
@@ -763,6 +841,11 @@ export default function App() {
     setContacts([]);
     setMetrics(null);
     if (ADMIN_VIEWS.includes(view)) setView("login");
+  };
+
+  const navigate = (nextView) => {
+    setView(nextView);
+    setNavOpen(false);
   };
 
   const fetchJson = async (path, options = {}) => {
@@ -835,6 +918,7 @@ export default function App() {
   };
 
   const handleLogout = async () => {
+    setNavOpen(false);
     await fetch(`${API}/api/auth/logout`, { method: "POST", credentials: "include" }).catch(() => {});
     setIsAuthenticated(false);
     setContacts([]);
@@ -930,20 +1014,23 @@ export default function App() {
     <div className="dm-root">
       <style>{GLOBAL_CSS}</style>
       <Rails />
-      <div className="dm-topnav">
-        <button className={navView === "portfolio" ? "active" : ""} onClick={() => setView("portfolio")}>Site public</button>
-        <button className={navView === "cv-public" ? "active" : ""} onClick={() => setView("cv-public")}>CV public</button>
+      <button className="dm-nav-toggle" type="button" aria-expanded={navOpen} onClick={() => setNavOpen((open) => !open)}>{navOpen ? "Fermer" : "Menu"}</button>
+      <button className={`dm-nav-backdrop ${navOpen ? "open" : ""}`} type="button" aria-label="Fermer le menu" onClick={() => setNavOpen(false)} />
+      <div className={`dm-topnav ${navOpen ? "open" : ""}`}>
+        <button className={navView === "portfolio" ? "active" : ""} onClick={() => navigate("portfolio")}>Site public</button>
+        <button className={navView === "cv-public" ? "active" : ""} onClick={() => navigate("cv-public")}>CV public</button>
         {isAuthenticated ? (
           <>
-            <button className={navView === "dashboard" ? "active" : ""} onClick={() => setView("dashboard")}>Dashboard</button>
-            <button className={navView === "projects" || navView === "edit" ? "active" : ""} onClick={() => setView("projects")}>Projets</button>
-            <button className={navView === "contacts" ? "active" : ""} onClick={() => setView("contacts")}>Contacts</button>
+            <button className={navView === "dashboard" ? "active" : ""} onClick={() => navigate("dashboard")}>Dashboard</button>
+            <button className={navView === "projects" || navView === "edit" ? "active" : ""} onClick={() => navigate("projects")}>Projets</button>
+            <button className={navView === "contacts" ? "active" : ""} onClick={() => navigate("contacts")}>Contacts</button>
             <button onClick={handleLogout}>Deconnexion</button>
           </>
         ) : (
-          <button className={navView === "login" ? "active" : ""} onClick={() => setView("login")}>Connexion</button>
+          <button className={navView === "login" ? "active" : ""} onClick={() => navigate("login")}>Connexion</button>
         )}
       </div>
+      <ScrollTopButton />
 
       {apiError && <div className="dm-shell" style={{ paddingBottom: 0 }}><div className="dm-error">{apiError}</div></div>}
 

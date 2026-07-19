@@ -34,7 +34,9 @@ const GLOBAL_CSS = `
 .dm-topnav{position:fixed; top:10px; right:10px; z-index:30; display:flex; flex-wrap:wrap; gap:6px; max-width:min(620px, calc(100% - 20px)); background:var(--ink); color:var(--bg); border:2px solid var(--accent); padding:8px}
 .dm-topnav button{height:30px; border:1px solid #f7f8f4; background:transparent; color:#f7f8f4; padding:0 10px; font:14px Consolas, "Courier New", monospace; cursor:pointer}
 .dm-topnav button.active{background:var(--accent); border-color:var(--accent)}
-.dm-nav-toggle{display:none; position:fixed; top:10px; right:10px; z-index:43; height:38px; border:2px solid var(--accent); background:var(--ink); color:var(--bg); padding:0 14px; font:700 13px Consolas, "Courier New", monospace; cursor:pointer; text-transform:uppercase}
+.dm-nav-toggle{display:none; position:fixed; top:10px; right:10px; z-index:43; width:42px; height:42px; align-items:center; justify-content:center; border:2px solid var(--accent); background:var(--ink); color:var(--bg); padding:0; cursor:pointer}
+.dm-hamburger{display:grid; gap:4px; width:18px}
+.dm-hamburger span{display:block; height:2px; background:currentColor}
 .dm-nav-backdrop,.dm-admin-backdrop{display:none}
 .dm-btn{min-height:38px; border:2px solid var(--ink); background:var(--surface); color:var(--ink); padding:8px 16px; font:700 14px Consolas, "Courier New", monospace; cursor:pointer; text-transform:uppercase}
 .dm-btn:hover,.dm-btn:focus-visible{background:var(--ink); color:var(--bg)}
@@ -77,7 +79,7 @@ const GLOBAL_CSS = `
 .dm-sidebar button.active{background:var(--ink); color:var(--bg)}
 .dm-sidebar-head{display:flex; justify-content:space-between; align-items:start; gap:12px; margin-bottom:28px}
 .dm-sidebar-close{border:1px solid var(--line) !important; width:auto !important; padding:6px 8px !important; font-size:12px !important; text-align:center !important; text-transform:uppercase}
-.dm-sidebar-toggle{border:1px solid var(--line); background:var(--surface); color:var(--ink); padding:8px 12px; font:700 13px Consolas, "Courier New", monospace; cursor:pointer; text-transform:uppercase}
+.dm-sidebar-toggle{width:42px; height:38px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--line); background:var(--surface); color:var(--ink); padding:0; cursor:pointer}
 .dm-admin-shell.sidebar-closed{grid-template-columns:0 1fr}
 .dm-admin-shell.sidebar-closed .dm-sidebar{padding:0; border-right:0; overflow:hidden}
 .dm-stat{min-height:116px; padding:15px}
@@ -538,7 +540,15 @@ function AdminLayout({ current, setView, path, children, onLogout }) {
       </aside>
       <main style={{ padding: "24px 28px", minWidth: 0 }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", borderBottom: "1px solid var(--line-soft)", paddingBottom: 12, marginBottom: 24, color: "var(--ink-soft)", fontSize: 13 }}>
-          <button className="dm-sidebar-toggle" type="button" aria-expanded={sidebarOpen} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? "Fermer menu" : "Ouvrir menu"}</button>
+          <button
+            className="dm-sidebar-toggle"
+            type="button"
+            aria-label={sidebarOpen ? "Fermer le menu admin" : "Ouvrir le menu admin"}
+            aria-expanded={sidebarOpen}
+            onClick={() => setSidebarOpen((open) => !open)}
+          >
+            <span className="dm-hamburger" aria-hidden="true"><span /><span /><span /></span>
+          </button>
           <span>{path}</span>
           <span style={{ color: "var(--accent-2)", fontWeight: 700 }}>session active</span>
         </div>
@@ -1014,7 +1024,15 @@ export default function App() {
     <div className="dm-root">
       <style>{GLOBAL_CSS}</style>
       <Rails />
-      <button className="dm-nav-toggle" type="button" aria-expanded={navOpen} onClick={() => setNavOpen((open) => !open)}>{navOpen ? "Fermer" : "Menu"}</button>
+      <button
+        className="dm-nav-toggle"
+        type="button"
+        aria-label={navOpen ? "Fermer le menu" : "Ouvrir le menu"}
+        aria-expanded={navOpen}
+        onClick={() => setNavOpen((open) => !open)}
+      >
+        <span className="dm-hamburger" aria-hidden="true"><span /><span /><span /></span>
+      </button>
       <button className={`dm-nav-backdrop ${navOpen ? "open" : ""}`} type="button" aria-label="Fermer le menu" onClick={() => setNavOpen(false)} />
       <div className={`dm-topnav ${navOpen ? "open" : ""}`}>
         <button className={navView === "portfolio" ? "active" : ""} onClick={() => navigate("portfolio")}>Site public</button>
